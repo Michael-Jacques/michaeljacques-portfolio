@@ -1,0 +1,293 @@
+#!/usr/bin/env python3
+"""Generates index.html, about.html and case/<slug>.html from cases.json + templates."""
+import json, os, html as H
+
+SITE = {
+  "name": "Michael Jacques",
+  "location": "Los Angeles, CA",
+  "email": "michaelsjacques@gmail.com",
+  "phone": "(954) 647-9037",
+  "linkedin": "https://www.linkedin.com/in/michaeljacques",
+  "year": "2026",
+  "url": "https://www.michaeljacques.work",
+}
+D = json.load(open('cases.json'))
+ALL = D['featured'] + D['archive']
+
+LOGO_PATHS = '<path class="logo-part logo-part--m" d="M0 0h17.5v24h-6V9l-2.75 5.5L6 9v15H0z"/><path class="logo-part logo-part--j" d="M21 0h7v18l-6 6h-3v-5.5h2z"/>'
+LOGO_SVG = f'<svg viewBox="0 0 28 24" fill="currentColor" aria-hidden="true">{LOGO_PATHS}</svg>'
+
+def head(title, desc, root, extra=''):
+    return f'''<!doctype html>
+<html lang="en" data-theme="black">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>{H.escape(title)}</title>
+<meta name="description" content="{H.escape(desc)}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{H.escape(title)}" />
+<meta property="og:description" content="{H.escape(desc)}" />
+<meta property="og:image" content="{SITE['url']}/assets/og.png" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="{root}assets/icons/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;800;900&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,600;1,700;1,800&family=Poppins:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="{root}styles.css" />
+{extra}
+</head>'''
+
+def header(root, active):
+    def tab(id_, label, href):
+        cur = ' aria-current="page" data-click-burst' if active == id_ else ' data-click-bounce'
+        return f'<a class="tab" href="{href}"{cur}>{label}</a>'
+    return f'''<header class="site-header" aria-label="Main navigation">
+  <div class="brand-area">
+    <a class="logo-link" href="{root}index.html" data-click-burst aria-label="Home"><span class="logo" aria-hidden="true"></span></a>
+    <span class="header-location" data-click-burst>{SITE['location']}</span>
+  </div>
+  <nav class="tabs" aria-label="Portfolio sections">
+    <span class="tabs-indicator" aria-hidden="true"></span>
+    {tab('work','Work', root+'index.html')}
+    {tab('about','About', root+'about.html')}
+  </nav>
+  <div class="header-contact" aria-label="Contact links">
+    <button class="email-copy" type="button" data-click-burst data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
+    <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
+    <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
+  </div>
+  <button class="header-info-toggle" type="button" aria-label="Contact" aria-expanded="false"><span></span></button>
+  <div class="header-info-panel" aria-hidden="true">
+    <button class="email-copy" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
+    <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email"></a>
+    <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn"></a>
+  </div>
+</header>
+<button class="header-info-scrim" tabindex="-1" aria-hidden="true"></button>'''
+
+def footer(root):
+    return f'''<div class="footer-reveal"><footer class="site-footer" aria-label="Footer">
+  <div class="footer-contact" aria-label="Footer contact links">
+    <button class="email-copy footer-email" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
+    <a class="social-link social-link--mail footer-social" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
+    <a class="social-link social-link--linkedin footer-social" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
+  </div>
+  <a class="footer-logo" href="{root}index.html" data-click-burst aria-label="Michael Jacques">{LOGO_SVG}</a>
+  <div class="footer-bottom"><p class="footer-year" data-click-burst>{SITE['year']}</p>
+    <div class="footer-socials"><a class="social-link social-link--mail footer-social" href="mailto:{SITE['email']}" aria-label="Email"></a><a class="social-link social-link--linkedin footer-social" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn"></a></div>
+  </div>
+</footer></div>'''
+
+def title_html(c):
+    t = c['title']
+    if c['titleStyle'] == 'serif':
+        # "Verizon <em>RIDE</em>" -> two lines, last (em) italic
+        if '<em>' in t:
+            a, b = t.split('<em>'); b = b.replace('</em>', '')
+            return f'<h2 class="case-title--editorial"><span class="case-title-line">{a.strip()}</span><span class="case-title-line"><em class="case-title-italic">{b}</em></span></h2>'
+        return f'<h2 class="case-title--editorial"><span class="case-title-line">{t}</span></h2>'
+    if c['titleStyle'] == 'sans':
+        return f'<h2 class="case-title--sans"><span class="case-title-line">{t}</span></h2>'
+    return f'<h2>{t}</h2>'
+
+def plain_title(c):
+    return c['title'].replace('<em>','').replace('</em>','')
+
+def crest(c):
+    funds = c.get('crest', [])
+    left = ''.join(f'<span class="case-fund">{f}</span>' for f in funds[1:3])
+    right = ''.join(f'<span class="case-fund">{f}</span>' for f in funds[3:5])
+    return f'''<div class="case-crest">
+  <span class="case-funds">{left}</span>
+  <span class="case-logo case-logo--mark">{funds[0] if funds else c['client']}</span>
+  <span class="case-funds">{right}</span>
+</div>'''
+
+def device(c, cls=''):
+    dv = c.get('device', 'laptop')
+    if dv == 'none' or not c.get('cover'):
+        return ''
+    return f'''<div class="case-device case-device--{dv} {cls}" aria-hidden="true"><div class="case-device__body"><img src="{{root}}{c['cover']}" alt="" loading="lazy" decoding="async"></div></div>'''
+
+def case_section(c, i, root):
+    n = i + 1
+    layout = ['right', 'left', 'center'][i % 3]
+    return f'''<section class="case-section" data-case-index="{i}" data-case-id="{c['slug']}" data-layout="{layout}" style="z-index:{n+4}" {'id="selected-work-start"' if i==0 else ''} aria-label="Selected work case {n}">
+  {'<a class="explore-cue" href="#selected-work-start" aria-label="Explore selected work"><span>Explore</span><span class="explore-arrow" aria-hidden="true"></span></a>' if i==0 else ''}
+  <div class="case-frame">
+    <span class="case-number" aria-hidden="true">case {c['num']}</span>
+    <div class="case-phone-mask" aria-hidden="true">{device(c).replace('{root}', root)}</div>
+    <div class="case-frame__safe" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="case-cover"><div class="case-cover__content">
+      {crest(c)}
+      {title_html(c)}
+      <div class="case-tags">{''.join(f'<span class="case-tag">{t}</span>' for t in c['tags'])}</div>
+      <a class="case-button" href="{root}case/{c['slug']}.html" data-click-bounce>Deep dive</a>
+    </div></div>
+  </div>
+</section>'''
+
+def index_page():
+    root = ''
+    words = ["DIGITAL", "CREATIVE", "INTERACTIVE", "EXPERIENTIAL", "WEB", "EVENT"]
+    sections = []
+    feats = D['featured']
+    for i, c in enumerate(feats):
+        if i == len(feats) - 1:
+            sections.append('<div class="case-divider-pin" aria-hidden="true"></div>')
+        sections.append(case_section(c, i, root))
+    archive = ''.join(f'<li><a href="case/{a["slug"]}.html" data-click-bounce><span class="archive__title">{a["title"].replace("<em>","").replace("</em>","")}</span><span class="archive__tag">{a["tag"]}</span><span class="archive__arrow" aria-hidden="true"></span></a></li>' for a in D['archive'])
+    body = f'''
+<body>
+<main class="page page--design" data-words='{json.dumps(words)}'>
+  <div class="intro-loader intro-loader--enter" aria-hidden="true">
+    <svg class="intro-loader-logo" viewBox="0 0 28 24" fill="currentColor">{LOGO_PATHS}</svg>
+    <span class="intro-transition-dot"></span>
+    <div class="intro-transition-character"><div class="intro-transition-character-clip"><span class="intro-transition-ring"></span></div></div>
+  </div>
+  <div class="header-top-fill" aria-hidden="true"></div>
+  {header(root, 'work')}
+  <section class="work-hero" aria-label="Selected work">
+    <div class="hero-intro"><h1 class="sr-only">Creative Producer</h1><div class="sr-only" aria-label="Profile highlights"><span>Digital Manager</span><span>Creative Producer</span></div></div>
+    <div class="screen-wheel">
+      <div class="carousel-stage"><canvas class="carousel-canvas" aria-label="Rotating 3D project carousel"></canvas></div>
+      <div class="wheel-lens-blur wheel-lens-blur--left" aria-hidden="true"></div>
+      <div class="wheel-lens-blur wheel-lens-blur--right" aria-hidden="true"></div>
+      <img class="hero-character-dom" src="assets/characters/hero-character.webp" alt="" aria-hidden="true">
+    </div>
+  </section>
+  <div class="hero-marquee" aria-hidden="true"><div class="hero-marquee__track"><span class="hero-marquee__copy">DIGITAL MANAGER · CREATIVE PRODUCER · </span><span class="hero-marquee__copy">DIGITAL MANAGER · CREATIVE PRODUCER · </span></div></div>
+  <div class="case-stack" id="selected-work">
+    {''.join(sections)}
+    <section class="archive-section" aria-label="More work">
+      <div class="archive">
+        <div class="archive__head"><span class="case-number">more work</span><span class="archive__count">{len(D['archive'])} projects</span></div>
+        <ul class="archive__list">{archive}</ul>
+      </div>
+    </section>
+  </div>
+  {footer(root)}
+</main>
+<script type="importmap">{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}}}</script>
+<script src="main.js"></script>
+<script type="module" src="hero.js"></script>
+</body></html>'''
+    return head("Michael Jacques — Portfolio", "Digital Manager. Creative Producer. Web, apps, AR and experiential for Google, Meta, Amazon, Honda and more.", root) + body
+
+RESUME = [
+ ("Left Field Labs", "Interactive Producer", "08/2021 – Present", "Google, Meta, Amazon, DataRobot, Superblue",
+  ["Produce a variety of projects including AR, VR, app and website development and interactive experiences.",
+   "Ideate, structure and respond to RFPs with budget, schedule and concept pitch decks.",
+   "Create schedules, run meetings, determine burn rates and problem-solve all facets of a project.",
+   "Manage multiple projects at once as the primary producer lead."]),
+ ("Crafted.LA", "Marketing Manager", "05/2020 – 09/2021", "Jane Fonda, Pac Sun, Urban Outfitters, Weelicious, Untitled Talent Agency",
+  ["Facilitated celebrity capsule collections with initial creative proposal, deal structure and marketing plans.",
+   "Created and maintained WordPress and Shopify stores while working with the fulfillment center on order requests.",
+   "Designed and ran marketing campaigns for Shopify Email and Instagram Ads.",
+   "Maintained relationships with talent managers and brought in client projects."]),
+ ("RPA", "Digital Producer", "05/2018 – 03/2020", "Honda and Acura",
+  ["Ran cross-functional team sprints to add enhancements to Honda's website using Agile methodology.",
+   "Managed project needs with Creative and UX teams to design and document site enhancements.",
+   "Handled tagging requirements and reporting, working closely with Analytics and Media teams.",
+   "Documented component capabilities for multiple web properties."]),
+ ("Razorfish / Publicis.Sapient", "Digital Producer", "02/2016 – 03/2018", "Honda and Acura",
+  ["Led content-management efforts from business request to production release for the Honda Automotive website.",
+   "Managed a content-authoring team of 6 on-site authors and 2 offshore developers.",
+   "Collaborated with the creative team to ensure deliverables were precise, including asset preparation in Photoshop.",
+   "Worked with the Program Director to plan content roles, processes and project-plan enhancements for releases."]),
+ ("Zimmerman Advertising", "Digital Account Manager", "10/2014 – 02/2016", "Keyes Automotive Group and other local dealer groups",
+  ["Managed each client's digital strategy, including Google paid search, social ads and website content, at ~$20k per month.",
+   "Implemented A/B testing on paid social campaigns and reported weekly, resulting in 25% more optimized spend.",
+   "Executed multiple Google AdWords campaigns from conception to execution."]),
+ ("Mr. 305 Inc.", "Marketing Coordinator & Designer", "Miami, FL", "Pitbull's record label",
+  ["Handled website updates, social posts, album covers, merchandise and banner ads for digital and physical products promoted to millions."]),
+]
+
+def about_page():
+    root = ''
+    bio = ("I'm Michael, a digital manager and creative producer who takes innovative projects from RFP to launch. "
+           "Over the years I've built a unique set of experience managing and producing everything from web design to social campaigns to AR experiences and experiential events, "
+           "with a client list that includes Google, Meta, Amazon, Honda and more. I bring a positive mentality to every team and I'm always looking to push the creative to the next level.")
+    jobs = ''.join(f'''<li class="resume__item">
+      <div class="resume__when">{when}</div>
+      <div class="resume__what"><h3>{co}</h3><p class="resume__role">{role}</p><p class="resume__clients">Clients: {clients}</p>
+      <ul>{''.join(f'<li>{b}</li>' for b in bullets)}</ul></div></li>''' for co, role, when, clients, bullets in RESUME)
+    body = f'''
+<body>
+<main class="page page--about">
+  {header(root, 'about')}
+  <section class="work-hero work-hero--about" aria-label="About">
+    <div class="about-panel">
+      <div class="about-panel__logo" aria-hidden="true"><div class="about-panel__photo"></div></div>
+      <p class="about-panel__text">{bio}</p>
+    </div>
+  </section>
+  <section class="resume" aria-label="Resume">
+    <div class="resume__inner">
+      <div class="resume__head"><span class="case-number">experience</span><a class="case-button case-button--small" href="mailto:{SITE['email']}" data-click-bounce>Get in touch</a></div>
+      <ol class="resume__list">{jobs}</ol>
+      <div class="resume__contact"><span>{SITE['email']}</span><span>{SITE['phone']}</span><span>{SITE['location']}</span></div>
+    </div>
+  </section>
+  {footer(root)}
+</main>
+<script src="main.js"></script>
+</body></html>'''
+    return head("About — Michael Jacques", "Digital Manager and Creative Producer in Los Angeles. Google, Meta, Amazon, Honda, DataRobot, Superblue.", root) + body
+
+def case_page(c, idx):
+    root = '../'
+    nxt = ALL[(idx + 1) % len(ALL)]
+    prv = ALL[(idx - 1) % len(ALL)]
+    meta = ''.join(f'<div class="case-meta__item"><span class="case-meta__label">{k}</span><span class="case-meta__value">{v}</span></div>' for k, v in c['meta'])
+    paras = ''.join(f'<p>{p}</p>' for p in c['body'])
+    shots = ''.join(f'<figure class="case-shot"><img src="{root}{g}" alt="{plain_title(c)} screenshot {i+1}" loading="lazy" decoding="async"></figure>' for i, g in enumerate(c.get('gallery', [])))
+    video = f'<figure class="case-shot case-shot--video"><iframe src="https://www.youtube.com/embed/{c["video"]}" title="{plain_title(c)} video" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></figure>' if c.get('video') else ''
+    num = c.get('num', '')
+    body = f'''
+<body>
+<main class="page page--case" data-case-id="{c['slug']}">
+  {header(root, 'work')}
+  <a class="case-back" href="{root}index.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
+  <section class="case-open-hero" data-layout="center" aria-label="{plain_title(c)}">
+    <div class="case-frame case-frame--open">
+      <span class="case-number" aria-hidden="true">{'case '+num if num else 'archive'}</span>
+      <div class="case-phone-mask case-phone-mask--open" aria-hidden="true">{device(c).replace('{root}', root)}</div>
+      <div class="case-frame__safe" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="case-cover"><div class="case-cover__content">
+        {crest(c)}
+        {title_html(c)}
+        <div class="case-tags">{''.join(f'<span class="case-tag">{t}</span>' for t in c['tags'])}</div>
+      </div></div>
+    </div>
+  </section>
+  <section class="case-page-body">
+    <div class="case-page-body__inner">
+      <div class="case-meta">{meta}</div>
+      <p class="case-intro"><span class="case-name">{c['client']}</span> — {c.get('summary', c['body'][0])}</p>
+    </div>
+  </section>
+  <section class="case-story">
+    <div class="case-story__inner">
+      <div class="case-story__text">{paras}</div>
+      <div class="case-shots">{video}{shots}</div>
+    </div>
+  </section>
+  <nav class="case-next" aria-label="Next case">
+    <a class="case-next__link case-next__link--prev" href="{prv['slug']}.html" data-click-bounce><span class="case-next__kicker">Previous</span><span class="case-next__title">{plain_title(prv)}</span></a>
+    <a class="case-next__link" href="{nxt['slug']}.html" data-click-bounce><span class="case-next__kicker">Next case</span><span class="case-next__title">{plain_title(nxt)}</span><span class="case-next__arrow" aria-hidden="true"></span></a>
+  </nav>
+  {footer(root)}
+</main>
+<script src="../main.js"></script>
+</body></html>'''
+    return head(f"{plain_title(c)} — Michael Jacques", c.get('summary', c['body'][0]), root) + body
+
+os.makedirs('case', exist_ok=True)
+open('index.html', 'w').write(index_page())
+open('about.html', 'w').write(about_page())
+for i, c in enumerate(ALL):
+    open(f'case/{c["slug"]}.html', 'w').write(case_page(c, i))
+print('built', 2 + len(ALL), 'pages')

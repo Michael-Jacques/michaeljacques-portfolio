@@ -1,0 +1,618 @@
+{
+ "featured": [
+  {
+   "slug": "verizon-ride",
+   "num": "01",
+   "title": "Verizon <em>RIDE</em>",
+   "titleStyle": "serif",
+   "client": "Verizon",
+   "tags": [
+    "#EXPERIENTIAL",
+    "#INDUSTRY 4.0"
+   ],
+   "crest": [
+    "Left Field Labs",
+    "Telly Awards"
+   ],
+   "cover": "assets/work/verizon-ride/00.png",
+   "device": "wall",
+   "summary": "An award-winning immersive activation for Verizon's New Business Incubation team: LED floor, LED walls and a 70\" touch table driven by a physical puck.",
+   "body": [
+    "With Left Field Labs as its storytelling collaborator, the Verizon New Business Incubation team is demonstrating how software solutions, built above Verizon's industry-leading network, can help usher customers into Industry 4.0.",
+    "The experiential activation included a fully immersive set with LED flooring and LED walls that connected to a 70\" touch-screen table. When a user interacted with the table via a puck, it triggered the floor and wall to activate the video and motion content created by the team."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Award",
+     "Telly Awards"
+    ],
+    [
+     "Year",
+     "2022"
+    ]
+   ],
+   "gallery": [
+    "assets/work/verizon-ride/01.png",
+    "assets/work/verizon-ride/02.png",
+    "assets/work/verizon-ride/03.png",
+    "assets/work/verizon-ride/04.png",
+    "assets/work/verizon-ride/05.png"
+   ]
+  },
+  {
+   "slug": "superblue",
+   "num": "02",
+   "title": "Superblue <em>App</em>",
+   "titleStyle": "serif",
+   "client": "Superblue",
+   "tags": [
+    "#IOS/ANDROID",
+    "#AR"
+   ],
+   "crest": [
+    "Time",
+    "Complex",
+    "Niantic",
+    "JR"
+   ],
+   "cover": "assets/work/superblue/00.png",
+   "device": "phone",
+   "summary": "A mobile app that makes experiential art participatory, launching with an AR collaboration between artist JR and Niantic.",
+   "body": [
+    "Superblue Art Gallery (Miami, FL) approached LFL with a unique challenge: how might they leverage the power of digital technology to make experiential art more accessible and participatory for all.",
+    "The idea was to build an app that would showcase the current exhibits within the gallery space, but more importantly, open the door for artists to create their own experiences through the digital space. The first was a partnership with the artist JR and the company Niantic, an AR experience that let users visit locations in real life and add photos and special notes for others to read.",
+    "Featured in Time Magazine and Complex Magazine."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Platform",
+     "iOS / Android / AR"
+    ],
+    [
+     "Press",
+     "Time, Complex"
+    ]
+   ],
+   "video": "5EW8Zg-1pPw",
+   "gallery": [
+    "assets/work/superblue/01.png",
+    "assets/work/superblue/02.png",
+    "assets/work/superblue/03.png",
+    "assets/work/superblue/04.png"
+   ]
+  },
+  {
+   "slug": "google-dei-site",
+   "num": "03",
+   "title": "GOOGLE FOR GAMES",
+   "titleStyle": "anton",
+   "client": "Google",
+   "tags": [
+    "#WEB",
+    "#DEI"
+   ],
+   "crest": [
+    "Google for Games"
+   ],
+   "cover": "assets/work/google-dei-site/01.jpg",
+   "device": "laptop",
+   "summary": "A site for the Google for Games team that turns a DEI message into action, with pledges and shareable social assets.",
+   "body": [
+    "Working with the Google for Games team to create a website dedicated to providing a strong message about supporting DEI in the gaming space was an incredible achievement.",
+    "The team wanted to focus on not just informing, but providing actionable results for others to showcase their support as well. We created interactive sections of the page where you could pledge your own support and download a shareable asset for your own social channels to promote."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Platform",
+     "Website"
+    ],
+    [
+     "Client",
+     "Google"
+    ]
+   ],
+   "gallery": [
+    "assets/work/google-dei-site/02.jpg",
+    "assets/work/google-dei-site/03.jpg",
+    "assets/work/google-dei-site/00.jpg"
+   ]
+  },
+  {
+   "slug": "meta-quest-dev-site",
+   "num": "04",
+   "title": "Meta Quest <em>Developers</em>",
+   "titleStyle": "serif",
+   "client": "Meta",
+   "tags": [
+    "#WEB",
+    "#VR"
+   ],
+   "crest": [
+    "Meta Quest"
+   ],
+   "cover": "assets/work/meta-quest-dev-site/00.jpg",
+   "device": "laptop",
+   "summary": "A redesign of the Meta Quest Developer site with a bold illustrated system built from the Quest gradient.",
+   "body": [
+    "Left Field Labs had the opportunity to work with the Meta Quest team to update their Developers site. This included creating a new design style that showcased the technical side of the work through illustrations.",
+    "Taking the bold colors of the gradient and turning them into backgrounds and graphic elements throughout the imagery helped create a sense of consistency throughout the site. The system was later carried through to the Meta Quest developer social channels."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Platform",
+     "Website"
+    ],
+    [
+     "Client",
+     "Meta"
+    ]
+   ],
+   "gallery": [
+    "assets/work/meta-quest-dev-site/01.jpg",
+    "assets/work/meta-quest-dev-site/02.jpg",
+    "assets/work/meta-quest-social/00.png",
+    "assets/work/meta-quest-social/01.png",
+    "assets/work/meta-quest-social/02.png",
+    "assets/work/meta-quest-social/03.png"
+   ]
+  },
+  {
+   "slug": "datarobot-event",
+   "num": "05",
+   "title": "DATAROBOT AI SUMMIT",
+   "titleStyle": "anton",
+   "client": "DataRobot",
+   "tags": [
+    "#EVENTS",
+    "#FABRICATION"
+   ],
+   "crest": [
+    "DataRobot"
+   ],
+   "cover": "assets/work/datarobot-event/00.jpg",
+   "device": "wall",
+   "summary": "A designed-and-fabricated booth with demo stations, merch check-in and a mini theatre, toured to the biggest events in AI.",
+   "body": [
+    "Left Field Labs was able to support DataRobot for run of shows with this booth that we designed and fabricated with a partner, taking it to some of the biggest events in the AI space.",
+    "This booth has areas for private demo stations, a check-in/merch stand and a mini theatre with seating. The team supported with merch, custom messaging, on-site support and full event support for each event. We also took DataRobot on the road to over 15 cities for the 9.0 product launch, and produced their fully virtual AIX event on Bizzabo."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Format",
+     "Events / Booth / Virtual"
+    ],
+    [
+     "Client",
+     "DataRobot"
+    ]
+   ],
+   "gallery": [
+    "assets/work/datarobot-event/01.png",
+    "assets/work/datarobot-event/02.png",
+    "assets/work/datarobot-event/04.png",
+    "assets/work/datarobot-roadshow/00.png",
+    "assets/work/datarobot-roadshow/03.jpg",
+    "assets/work/datarobot-aix/00.jpg",
+    "assets/work/datarobot-aix/02.jpg"
+   ]
+  },
+  {
+   "slug": "honda-website",
+   "num": "06",
+   "title": "Honda <em>Automobiles</em>",
+   "titleStyle": "serif",
+   "client": "Honda",
+   "tags": [
+    "#WEB",
+    "#AUTOMOTIVE"
+   ],
+   "crest": [
+    "Honda",
+    "Acura",
+    "RPA",
+    "Razorfish"
+   ],
+   "cover": "assets/work/honda-website/00.png",
+   "device": "laptop",
+   "summary": "Four years producing honda.com across two agencies and two redesign systems, plus the Acura Vehicles site.",
+   "body": [
+    "The staple of the Honda Automobiles company is their .com site. Working on this for 4 years at both Razorfish and RPA was an incredible experience. Having gone through two different redesign systems, each agency attempted to provide a different strategy for how to work on this website.",
+    "Another main aspect of this site are all the tools needed to help users find inventory, estimate payments, build their own custom vehicle and browse the selection of dealers for each car. On the Acura side, the luxury approach meant fewer vehicles and richer, more detailed content for each one."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Digital Producer"
+    ],
+    [
+     "Agency",
+     "Razorfish / RPA"
+    ],
+    [
+     "Platform",
+     "Website"
+    ],
+    [
+     "Client",
+     "Honda / Acura"
+    ]
+   ],
+   "gallery": [
+    "assets/work/honda-website/01.png",
+    "assets/work/honda-website/02.png",
+    "assets/work/honda-website/03.png",
+    "assets/work/acura-website/00.png",
+    "assets/work/acura-website/01.png",
+    "assets/work/acura-website/03.png"
+   ]
+  }
+ ],
+ "archive": [
+  {
+   "slug": "datarobot-aix",
+   "title": "DataRobot <em>AIX</em>",
+   "tag": "Virtual event",
+   "titleStyle": "serif",
+   "client": "DataRobot",
+   "tags": [
+    "#VIRTUAL EVENT",
+    "#BIZZABO"
+   ],
+   "device": "laptop",
+   "cover": "assets/work/datarobot-aix/00.jpg",
+   "body": [
+    "Coming out of the pandemic, DataRobot wanted to continue their yearly event to present the latest updates to their software. LFL was challenged with designing, producing and supporting the run of show for the full virtual event.",
+    "This was a fully virtual event with live sessions, chat features and on-demand content provided to all attendees. Utilizing Bizzabo as the backend system, we were able to capture analytics on a variety of topics to provide insight for the full event."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Format",
+     "Virtual event"
+    ],
+    [
+     "Client",
+     "DataRobot"
+    ]
+   ],
+   "gallery": [
+    "assets/work/datarobot-aix/01.png",
+    "assets/work/datarobot-aix/02.jpg",
+    "assets/work/datarobot-aix/03.jpg"
+   ]
+  },
+  {
+   "slug": "datarobot-roadshow",
+   "title": "DATAROBOT ROADSHOW",
+   "tag": "Events, 15 cities",
+   "titleStyle": "anton",
+   "client": "DataRobot",
+   "tags": [
+    "#EVENTS",
+    "#15 CITIES"
+   ],
+   "device": "wall",
+   "cover": "assets/work/datarobot-roadshow/03.jpg",
+   "body": [
+    "We took DataRobot on the road to over 15 different cities and partnered with companies like Google, EY, Amazon and others to host an intimate lunch-and-learn for the new 9.0 product launch.",
+    "Left Field Labs helped set up locations, swag, scheduling and websites for each location to drive awareness and sign-ups."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Format",
+     "Roadshow, 15+ cities"
+    ],
+    [
+     "Client",
+     "DataRobot"
+    ]
+   ],
+   "gallery": [
+    "assets/work/datarobot-roadshow/00.png",
+    "assets/work/datarobot-roadshow/04.jpg",
+    "assets/work/datarobot-roadshow/05.jpg",
+    "assets/work/datarobot-roadshow/06.jpg"
+   ]
+  },
+  {
+   "slug": "facebook-portal",
+   "title": "Portal <em>Assistant</em>",
+   "tag": "Conversational design",
+   "titleStyle": "serif",
+   "client": "Meta",
+   "tags": [
+    "#CONVERSATIONAL",
+    "#PROTOTYPE"
+   ],
+   "device": "none",
+   "cover": "",
+   "body": [
+    "LFL had the opportunity to work closely with the Facebook Reality Labs team by supporting them with conversational design for their Portal product.",
+    "The LFL team provided product concepts, designs and full user-experience prototypes for the Reality Labs team to take on as potential upgrades for their platform."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Format",
+     "Conversational design"
+    ],
+    [
+     "Client",
+     "Facebook Reality Labs"
+    ]
+   ],
+   "gallery": []
+  },
+  {
+   "slug": "meta-quest-social",
+   "title": "Meta Quest <em>Social</em>",
+   "tag": "Social",
+   "titleStyle": "serif",
+   "client": "Meta",
+   "tags": [
+    "#SOCIAL",
+    "#DEVELOPERS"
+   ],
+   "device": "phone",
+   "cover": "assets/work/meta-quest-social/00.png",
+   "body": [
+    "After having worked on the redesign of the Meta Quest for Developers website, the team wanted us to carry that system through to their social channels.",
+    "Working with secured information and tight deadlines, we had to make sure everything was handled with efficiency. The team created a variety of posts for the developer audience including product announcements, feature updates, event recaps and more."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Interactive Producer"
+    ],
+    [
+     "Agency",
+     "Left Field Labs"
+    ],
+    [
+     "Format",
+     "Social campaign"
+    ],
+    [
+     "Client",
+     "Meta"
+    ]
+   ],
+   "gallery": [
+    "assets/work/meta-quest-social/01.png",
+    "assets/work/meta-quest-social/02.png",
+    "assets/work/meta-quest-social/03.png",
+    "assets/work/meta-quest-social/04.png",
+    "assets/work/meta-quest-social/05.png"
+   ]
+  },
+  {
+   "slug": "crafted-la",
+   "title": "CRAFTED.LA",
+   "tag": "Merch & retail",
+   "titleStyle": "anton",
+   "client": "Crafted.LA",
+   "tags": [
+    "#RETAIL",
+    "#MERCH"
+   ],
+   "device": "wall",
+   "cover": "assets/work/crafted-la/00.jpg",
+   "body": [
+    "During my time at Crafted.LA I helped produce and set up creative concepts for apparel and candle merchandise at retailers including Pac Sun, Urban Outfitters, David's Bridal and Fashion Nova.",
+    "We provided design and wash concepts, worked with manufacturers to get the printing and sewing handled correctly, and came up with full product-line concepts for the stores. I also facilitated celebrity capsule collections, ran the Shopify and WordPress stores and the email and Instagram campaigns behind them."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Marketing Manager"
+    ],
+    [
+     "Company",
+     "Crafted.LA"
+    ],
+    [
+     "Format",
+     "Apparel & retail"
+    ],
+    [
+     "Clients",
+     "Pac Sun, Urban Outfitters"
+    ]
+   ],
+   "gallery": [
+    "assets/work/crafted-la/01.jpg",
+    "assets/work/crafted-la/02.jpg",
+    "assets/work/crafted-la/03.jpg",
+    "assets/work/crafted-la/05.png",
+    "assets/work/crafted-la/06.png"
+   ]
+  },
+  {
+   "slug": "acura-website",
+   "title": "Acura <em>Vehicles</em>",
+   "tag": "Web",
+   "titleStyle": "serif",
+   "client": "Acura",
+   "tags": [
+    "#WEB",
+    "#AUTOMOTIVE"
+   ],
+   "device": "laptop",
+   "cover": "assets/work/acura-website/00.png",
+   "body": [
+    "The Acura Vehicles website is their primary focus for driving information and generating leads. Taking the luxury approach to the website, they focus on high-quality content that is visually compelling and represents the luxury of the brand.",
+    "With fewer vehicle options compared to their counterpart Honda, they focused on more detail about each vehicle and the content provided."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Digital Producer"
+    ],
+    [
+     "Agency",
+     "Razorfish / RPA"
+    ],
+    [
+     "Platform",
+     "Website"
+    ],
+    [
+     "Client",
+     "Acura"
+    ]
+   ],
+   "gallery": [
+    "assets/work/acura-website/01.png",
+    "assets/work/acura-website/02.png",
+    "assets/work/acura-website/03.png",
+    "assets/work/acura-website/04.png"
+   ]
+  },
+  {
+   "slug": "zimmerman-advertising",
+   "title": "ZIMMERMAN ADVERTISING",
+   "tag": "Paid social",
+   "titleStyle": "anton",
+   "client": "Zimmerman",
+   "tags": [
+    "#PAID SOCIAL",
+    "#AUTOMOTIVE"
+   ],
+   "device": "phone",
+   "cover": "assets/work/zimmerman-advertising/01.jpg",
+   "body": [
+    "Tackling the social side of work for local car dealerships was a great opportunity to understand how each vehicle and dealer has a vastly different audience.",
+    "Being responsible for creating the entire post, including copy, imagery and full concept, allowed me to really focus on the prime target audience for each. I managed each client's digital strategy across Google paid search, social ads and website content, and A/B tested paid social to deliver 25% more optimized spend."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Digital Account Manager"
+    ],
+    [
+     "Agency",
+     "Zimmerman Advertising"
+    ],
+    [
+     "Format",
+     "Paid social & search"
+    ],
+    [
+     "Clients",
+     "Keyes Automotive Group"
+    ]
+   ],
+   "gallery": [
+    "assets/work/zimmerman-advertising/00.jpg",
+    "assets/work/zimmerman-advertising/02.jpg",
+    "assets/work/zimmerman-advertising/03.jpg",
+    "assets/work/zimmerman-advertising/04.jpg"
+   ]
+  },
+  {
+   "slug": "mr-305",
+   "title": "Mr. 305 <em>Inc.</em>",
+   "tag": "Record label design",
+   "titleStyle": "serif",
+   "client": "Mr. 305 Inc.",
+   "tags": [
+    "#RECORD LABEL",
+    "#DESIGN"
+   ],
+   "device": "wall",
+   "cover": "assets/work/mr-305/00.jpg",
+   "body": [
+    "Getting the opportunity at the start of my career to work with Pitbull and his record label in Miami was an incredible experience. As the marketing coordinator and designer, I handled anything that came down the pipeline: website updates, social media posts, album covers, merchandise, banner ads and more.",
+    "Working on both digital and physical products promoted to millions of people, including merch sold during Pitbull's tour and albums that were pressed and released, really helped me understand and grow in this space."
+   ],
+   "meta": [
+    [
+     "Role",
+     "Marketing Coordinator & Designer"
+    ],
+    [
+     "Company",
+     "Mr. 305 Inc."
+    ],
+    [
+     "Format",
+     "Brand, merch, digital"
+    ],
+    [
+     "Location",
+     "Miami, FL"
+    ]
+   ],
+   "gallery": [
+    "assets/work/mr-305/07.jpg",
+    "assets/work/mr-305/08.jpg",
+    "assets/work/mr-305/10.jpg",
+    "assets/work/mr-305/12.jpg",
+    "assets/work/mr-305/01.jpg",
+    "assets/work/mr-305/03.jpg"
+   ]
+  }
+ ]
+}
