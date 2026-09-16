@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-mode="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Michael Jacques — Ask the Portfolio</title>
+<meta name="description" content="A conversational portfolio. Ask Michael Jacques about the projects, the clients and how a production actually runs." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Michael Jacques — Ask the Portfolio" />
+<meta property="og:description" content="A conversational portfolio. Ask about the projects, the clients and how a production actually runs." />
+<meta property="og:image" content="https://www.michaeljacques.work/assets/og.png" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+<div class="chat-shell">
+  <header class="chat-header">
+    <a class="brand" href="index.html" aria-label="Michael Jacques"><svg viewBox="0 0 28 24" fill="currentColor" aria-hidden="true"><path class="logo-part logo-part--m" d="M0 0h17.5v24h-6V9l-2.75 5.5L6 9v15H0z"/><path class="logo-part logo-part--j" d="M21 0h7v18l-6 6h-3v-5.5h2z"/></svg><span class="brand__name">Michael Jacques</span></a>
+    <div class="header-tools">
+      <button class="icon-btn" id="mode" type="button" aria-label="Toggle light and dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+      </button>
+      <a class="view-link" href="index.html">Classic view
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </header>
+
+  <div class="chat-scroll">
+    <div class="chat-inner">
+      <section class="hero">
+        <h1>Michael produces <span class="hl">digital work that ships</span> — so his portfolio answers questions instead of making you hunt</h1>
+        <p>Ask about the projects, the clients, how a production actually runs. You&#x27;ll get his own material, in his own words.</p>
+        <div class="hero__meta">
+          <span><b>12</b> years producing</span>
+          <span><b>Google · Meta · Amazon</b></span>
+          <span><b>Telly</b> winner</span>
+          <span>Los Angeles</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="composer-wrap">
+    <button class="starters-btn" type="button" aria-haspopup="true" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:13px;height:13px"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-8.1A8.4 8.4 0 1 1 21 11.5z"/></svg>
+      Not sure what to ask?
+    </button>
+    <div class="starters" role="menu" aria-label="Conversation starters">
+      <h2>Try one of these</h2>
+      <button type="button">What projects have you worked on?</button><button type="button">Who have you worked with?</button><button type="button">Walk me through your career</button><button type="button">Show me the AR and VR work</button><button type="button">How do you run a project?</button><button type="button">What was the hardest one?</button><button type="button">What are you looking for next?</button><button type="button">How can I reach you?</button>
+    </div>
+    <form class="composer" autocomplete="off">
+      <button class="pulse" type="submit" aria-label="Send">
+        <span class="pulse__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <label class="field">
+        <span class="sr-only">Ask about Michael's work</span>
+        <input id="ask" name="ask" type="text" placeholder="Ask about a project, a client, the process…" />
+        <button class="send" type="submit" aria-label="Send question">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </label>
+    </form>
+    <p class="composer__note">Curated answers from Michael's own case notes · <a href="index.html" style="color:inherit">browse the classic portfolio</a></p>
+  </div>
+</div>
+<script src="chat-data.js"></script>
+<script src="chat.js"></script>
+</body></html>

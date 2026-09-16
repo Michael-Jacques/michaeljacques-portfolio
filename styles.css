@@ -37,7 +37,7 @@ img { display:block; max-width:100% }
 
 /* ---------- page shell ---------- */
 .page { position:relative; min-height:100vh; background:#fff; padding-top:var(--header-height) }
-.page--about { padding-top:0 }
+.page--about { padding-top:calc(var(--header-height) + clamp(18px,3vh,40px)) }
 .page:before { content:""; position:fixed; top:0; left:0; z-index:10; width:100%; height:var(--header-height);
   background-color:rgba(255,255,255,var(--first-case-dock-progress,1)); pointer-events:none }
 .page--about:before, .page--case:before { background-color:#fff }
@@ -299,7 +299,8 @@ html[data-last-case-docked] .case-divider-pin { opacity:1 }
 @keyframes about-logo-accent-fade { from{opacity:1} to{opacity:0} }
 .resume { position:relative; z-index:1; background:#fff; padding:0 var(--case-frame-page-pad) var(--case-frame-page-pad) }
 .resume__inner { border:1px solid var(--case-frame-line); padding:var(--case-frame-outer-pad) }
-.resume__head { display:flex; align-items:center; justify-content:space-between; height:var(--case-frame-outer-pad); margin:calc(-1 * var(--case-frame-outer-pad)) 0 clamp(24px,3vw,48px) }
+.resume__head { display:flex; align-items:center; justify-content:space-between; gap:20px; height:auto;
+  margin:0 0 clamp(26px,3.4vw,52px); padding-top:clamp(10px,1.4vw,18px) }
 .resume__head .case-number { position:static; height:auto }
 .resume__head { height:auto; margin:0 0 clamp(24px,3vw,48px); padding-top:0 }
 .resume__head .case-button { margin:0 }

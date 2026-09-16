@@ -8,7 +8,7 @@ DST = 'dist'
 if os.path.exists(DST): shutil.rmtree(DST)
 os.makedirs(DST)
 
-for f in ['index.html', 'gallery.html', 'wheel.html', 'about.html', 'styles.css', 'chat.css', 'head.css',
+for f in ['index.html', 'ask.html', 'gallery.html', 'wheel.html', 'about.html', 'styles.css', 'chat.css', 'head.css',
           'main.js', 'hero.js', 'chat.js', 'chat-data.js', 'head.js', 'head-data.js']:
     shutil.copy(f, DST)
 shutil.copytree('case', DST + '/case')
@@ -42,7 +42,7 @@ s = open(f'{DST}/index.html').read()
 head = re.search(r'<head>(.*?)</head>', s, re.S).group(1)
 body = re.search(r'<body>(.*?)</body>', s, re.S).group(1)
 keep = '\n'.join(l for l in head.splitlines() if ('<title' in l or '<link' in l or 'og:' in l or 'twitter' in l or 'name="description"' in l))
-keep = keep.replace('<title>Michael Jacques — Ask the Portfolio</title>', '<title>Ask Michael Jacques</title>')
+keep = keep.replace('<title>Michael Jacques \u2014 What\u2019s In My Head</title>', '<title>What\u2019s In My Head</title>')
 open(f'{DST}/artifact.html', 'w').write(keep + '\n' + body)
 
 # docs/ for GitHub Pages

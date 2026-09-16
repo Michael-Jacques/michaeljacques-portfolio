@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates index.html, about.html and case/<slug>.html from cases.json + templates."""
+"""Generates index.html (the head), ask.html (the chat), about.html and case/<slug>.html."""
 import json, os, re, html as H
 import chat_content as CC
 
@@ -51,7 +51,7 @@ def header(root, active):
   </div>
   <nav class="tabs" aria-label="Portfolio sections">
     <span class="tabs-indicator" aria-hidden="true"></span>
-    {tab('work','Work', root+'gallery.html')}
+    {tab('work','Work', root+'index.html')}
     {tab('about','About', root+'about.html')}
   </nav>
   <div class="header-contact" aria-label="Contact links">
@@ -59,7 +59,7 @@ def header(root, active):
     <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
     <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
   </div>
-  <a class="chat-link" href="{root}index.html" data-click-bounce><span class="chat-link__dot" aria-hidden="true"></span>Ask me anything</a>
+  <a class="chat-link" href="{root}ask.html" data-click-bounce><span class="chat-link__dot" aria-hidden="true"></span>Ask me anything</a>
   <button class="header-info-toggle" type="button" aria-label="Contact" aria-expanded="false"><span></span></button>
   <div class="header-info-panel" aria-hidden="true">
     <button class="email-copy" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
@@ -71,7 +71,7 @@ def header(root, active):
 
 
 def fab(root):
-    return f"""<a class="chat-fab" href="{root}index.html" aria-label="Ask the portfolio anything">
+    return f"""<a class="chat-fab" href="{root}ask.html" aria-label="Ask the portfolio anything">
   <span class="chat-fab__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   <span class="chat-fab__tip">Ask me anything</span>
 </a>"""
@@ -217,9 +217,6 @@ RESUME = [
 
 def about_page():
     root = ''
-    bio = ("I'm Michael, a digital manager and creative producer who takes innovative projects from RFP to launch. "
-           "Over the years I've built a unique set of experience managing and producing everything from web design to social campaigns to AR experiences and experiential events, "
-           "with a client list that includes Google, Meta, Amazon, Honda and more. I bring a positive mentality to every team and I'm always looking to push the creative to the next level.")
     jobs = ''.join(f'''<li class="resume__item">
       <div class="resume__when">{when}</div>
       <div class="resume__what"><h3>{co}</h3><p class="resume__role">{role}</p><p class="resume__clients">Clients: {clients}</p>
@@ -228,12 +225,6 @@ def about_page():
 <body>
 <main class="page page--about">
   {header(root, 'about')}
-  <section class="work-hero work-hero--about" aria-label="About">
-    <div class="about-panel">
-      <div class="about-panel__logo" aria-hidden="true"><div class="about-panel__photo"></div></div>
-      <p class="about-panel__text">{bio}</p>
-    </div>
-  </section>
   <section class="resume" aria-label="Resume">
     <div class="resume__inner">
       <div class="resume__head"><span class="case-number">experience</span><a class="case-button case-button--small" href="mailto:{SITE['email']}" data-click-bounce>Get in touch</a></div>
@@ -261,7 +252,7 @@ def case_page(c, idx):
 <body>
 <main class="page page--case" data-case-id="{c['slug']}">
   {header(root, 'work')}
-  <a class="case-back" href="{root}gallery.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
+  <a class="case-back" href="{root}index.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
   <section class="case-open-hero" data-layout="center" aria-label="{plain_title(c)}">
     <div class="case-frame case-frame--open">
       <span class="case-number" aria-hidden="true">{'case '+num if num else 'archive'}</span>
@@ -368,7 +359,7 @@ def chat_page():
       <button class="icon-btn" id="mode" type="button" aria-label="Toggle light and dark">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
       </button>
-      <a class="view-link" href="gallery.html">Classic view
+      <a class="view-link" href="index.html">Classic view
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
     </div>
   </header>
@@ -409,7 +400,7 @@ def chat_page():
         </button>
       </label>
     </form>
-    <p class="composer__note">Curated answers from Michael's own case notes · <a href="gallery.html" style="color:inherit">browse the classic portfolio</a></p>
+    <p class="composer__note">Curated answers from Michael's own case notes · <a href="index.html" style="color:inherit">browse the classic portfolio</a></p>
   </div>
 </div>
 <script src="chat-data.js"></script>
@@ -477,7 +468,7 @@ def gallery_page():
   <nav class="bar__nav" aria-label="Sections">
     <a href="about.html">About</a>
     <a href="mailto:{SITE['email']}">Contact</a>
-    <a class="is-red" href="index.html">Ask me anything</a>
+    <a class="is-red" href="ask.html">Ask me anything</a>
   </nav>
 </header>
 
@@ -501,10 +492,16 @@ def gallery_page():
 
 os.makedirs('case', exist_ok=True)
 open('wheel.html', 'w').write(index_page())
-open('gallery.html', 'w').write(gallery_page())
+open('index.html', 'w').write(gallery_page())
+open('gallery.html', 'w').write(
+  '<!doctype html><html lang="en"><head><meta charset="UTF-8">'
+  '<title>Michael Jacques</title>'
+  '<meta http-equiv="refresh" content="0; url=index.html">'
+  '<script>location.replace("index.html"+location.hash)</script></head>'
+  '<body><a href="index.html">Continue to michaeljacques.work</a></body></html>')
 open('head-data.js', 'w').write(head_data())
 open('chat-data.js', 'w').write(chat_data())
-open('index.html', 'w').write(chat_page())
+open('ask.html', 'w').write(chat_page())
 open('about.html', 'w').write(about_page())
 for i, c in enumerate(ALL):
     open(f'case/{c["slug"]}.html', 'w').write(case_page(c, i))

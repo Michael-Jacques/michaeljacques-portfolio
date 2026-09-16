@@ -137,6 +137,32 @@
       return !hits().length;
     };
 
+    // soft pass: nudge pairs apart until the gaps between them are even
+    const ideal = Math.sqrt((W * H) / n) * 0.92;
+    for (let p = 0; p < 160; p++) {
+      for (let i = 0; i < n; i++) for (let j2 = i + 1; j2 < n; j2++) {
+        const a = boxes[i], b = boxes[j2];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const d = Math.hypot(dx, dy) || 0.01;
+        if (d >= ideal) continue;
+        const push = (ideal - d) * 0.06;
+        const ux = dx / d, uy = dy / d;
+        a.x -= ux * push; a.y -= uy * push;
+        b.x += ux * push; b.y += uy * push;
+      }
+      // keep clear of the cap and the face while spreading
+      for (let i = 0; i < n; i++) for (let k = n; k < boxes.length; k++) {
+        const a = boxes[i], o = boxes[k];
+        const needX = (a.w + o.w) / 2 + pad, needY = (a.h + o.h) / 2 + pad;
+        const dx = a.x - o.x, dy = a.y - o.y;
+        const ox = needX - Math.abs(dx), oy = needY - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) continue;
+        if (ox / needX < oy / needY) a.x += (ox + 1) * (dx < 0 ? -1 : 1);
+        else a.y += (oy + 1) * (dy < 0 ? -1 : 1);
+      }
+      clamp();
+    }
+
     for (let attempt = 0; attempt < 8; attempt++) {
       if (relax(320, attempt ? 2.6 : 0)) break;
       for (const [i, j] of hits()) {
