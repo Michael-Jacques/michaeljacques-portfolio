@@ -32,24 +32,47 @@
   spill.appendChild(doodles);
 
   /* ---------- lay them out so none overlap ---------- */
+  const CAP_AR = 1.0616;   // the cap artwork's width / height
   function layout() {
-    // fit the plume into the real gap between the top bar and the open skull
-    const faceBox = document.querySelector('.head__face').getBoundingClientRect();
+    const faceEl = document.querySelector('.head__face');
+    const faceBox = faceEl.getBoundingClientRect();
+    if (!faceBox.width) return;
     const barBottom = document.querySelector('.bar').getBoundingClientRect().bottom;
-    const avail = Math.max(150, (faceBox.top + faceBox.height * 0.13) - barBottom - 10);
-    spill.style.height = Math.round(Math.min(avail, 400)) + 'px';
+    const headW = faceBox.width;
+
+    // the plume is a tight column: wide enough to hold the items, no wider
+    const wantW = Math.min(innerWidth * 0.94, headW * 3.05);
+    const top = barBottom + 12;
+    const deep = matchMedia('(max-width:860px)').matches ? 0.04 : 0.17;
+    const bottom = faceBox.top + faceBox.height * deep;   // items reach down into the open skull
+    const wantH = Math.max(170, bottom - top);
+    spill.style.width = Math.round(wantW) + 'px';
+    spill.style.height = Math.round(wantH) + 'px';
+    // anchor the column explicitly: CSS percentages drift as the head resizes
+    spill.style.bottom = Math.round(faceBox.bottom - bottom) + 'px';
+
+    // park the lifted cap at the top of that column, and tell CSS where it goes
+    const narrow = matchMedia('(max-width:860px)').matches;
+    const capFrac = narrow ? 0.74 : 0.96;
+    wrap.style.setProperty('--cap-w', (capFrac * 100).toFixed(1) + '%');
+    const capW = headW * capFrac, capH = capW / CAP_AR;
+    const capTopWanted = top + 2;
+    wrap.style.setProperty('--cap-open-y', Math.round(capTopWanted - faceBox.top) + 'px');
+
     const W = spill.clientWidth, H = spill.clientHeight;
     if (!W || !H) return;
     const n = P.items.length;
     // size budget: fill about a quarter of the area, clamped to something legible
-    const base = Math.max(46, Math.min(104, Math.sqrt((W * H * 0.26) / n)));
-    const pad = Math.max(9, base * 0.14);
+    // size items off the head so they always read at the same scale as the face
+    const base = Math.max(48, Math.min(headW * 0.38, Math.sqrt((W * H * 0.34) / n)));
+    const pad = Math.max(7, base * 0.10);
 
     const boxes = P.items.map((it, i) => {
       const ar = it.ar || 1;
-      const scale = 0.84 + rnd(i, 6) * 0.34;
+      const scale = 0.88 + rnd(i, 6) * 0.26;
       let w = base * scale, h = w / ar;
-      if (h > base * 1.24) { h = base * 1.24; w = h * ar; }
+      if (h > base * 1.55) { h = base * 1.55; w = h * ar; }
+      if (w < base * 0.66) { w = base * 0.66; h = w / ar; }   // tall items stay legible
       // seed on a symmetric fan rising out of the cavity, widest at the top
       // rank alternates outward from the centre: 0, +1, -1, +2, -2 ...
       const half = Math.floor(i / 2) + (i % 2);
@@ -64,13 +87,13 @@
     });
 
     // the lifted cap is an obstacle the items must flow around
-    const capEl = document.querySelector('.head__cap');
-    const capW = capEl.getBoundingClientRect().width || faceBox.width * 0.9;
-    const capH = capW / 1.447;
-    const capCx = faceBox.left + faceBox.width / 2 - spill.getBoundingClientRect().left;
-    const lift = matchMedia('(max-width:860px)').matches ? 1.32 : 1.96;
-    const capCy = faceBox.top - (lift - 0.5) * capH - spill.getBoundingClientRect().top;
-    boxes.push({ w: capW * 1.02, h: capH * 1.02, x: capCx, y: capCy, pinned: true });
+    const sbox = spill.getBoundingClientRect();
+    boxes.push({
+      w: capW * 1.10, h: capH * 1.08,
+      x: faceBox.left + faceBox.width / 2 - sbox.left,
+      y: capTopWanted + capH / 2 - sbox.top,
+      pinned: true
+    });
 
     const clamp = () => { for (let i = 0; i < n; i++) {
       boxes[i].x = Math.max(boxes[i].w / 2, Math.min(W - boxes[i].w / 2, boxes[i].x));
@@ -117,7 +140,10 @@
     for (let attempt = 0; attempt < 8; attempt++) {
       if (relax(300, attempt ? 2.4 : 0)) break;
       for (const [i, j] of hits()) {
-        for (const k of [i, j]) if (!boxes[k].pinned) { boxes[k].w *= 0.94; boxes[k].h *= 0.94; }
+        for (const k of [i, j]) {
+          if (boxes[k].pinned || boxes[k].w <= base * 0.60) continue;
+          boxes[k].w *= 0.95; boxes[k].h *= 0.95;
+        }
       }
       clamp();
     }

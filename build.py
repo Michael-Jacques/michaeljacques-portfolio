@@ -451,16 +451,7 @@ def head_data():
         items=items, base='assets/head/items/', art='assets/items/', doodles='assets/head/doodles.webp'
     ), ensure_ascii=False, separators=(',', ':')) + ';\n'
 
-CAPABILITIES = ["Production &amp; delivery", "RFP and pitch decks", "Budgets and schedules",
-                "AR / VR experiences", "Experiential &amp; events", "Web at scale",
-                "Social campaigns", "Cross-functional teams"]
-FACTS = ["Interactive Producer at Left Field Labs", "Google, Meta, Amazon, DataRobot, Superblue",
-         "Telly Award for Verizon RIDE", "Four years on honda.com",
-         "15+ cities on one roadshow", "Started at Pitbull's label in Miami"]
-
 def gallery_page():
-    caps = ''.join(f'<a href="#open">{c}</a>' for c in CAPABILITIES)
-    facts = '<br>'.join(FACTS)
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -484,7 +475,6 @@ def gallery_page():
 <header class="bar">
   <a class="bar__brand" href="index.html" aria-label="Michael Jacques">{LOGO_SVG}<span>Michael Jacques</span></a>
   <nav class="bar__nav" aria-label="Sections">
-    <a href="#open">Work</a>
     <a href="about.html">About</a>
     <a href="mailto:{SITE['email']}">Contact</a>
     <a class="is-red" href="index.html">Ask me anything</a>
@@ -492,22 +482,14 @@ def gallery_page():
 </header>
 
 <main class="stage">
-  <p class="yearword yearword--l" aria-hidden="true"><small>Producing since</small>20</p>
-
   <div class="headwrap">
-    <div class="spill" aria-hidden="false"></div>
+    <div class="spill"></div>
     <button class="head" type="button" aria-expanded="false" aria-label="Open my head and see the work">
       <span class="head__hint">Ever wondered what\u2019s in my head?</span>
       <img class="head__face" src="assets/head/head-open.webp" alt="Illustration of Michael Jacques" width="793" height="1048" />
       <img class="head__cap" src="assets/head/cap.webp" alt="" aria-hidden="true" />
     </button>
   </div>
-
-  <p class="yearword yearword--r" aria-hidden="true">14</p>
-
-  <p class="thesis">Shaping digital work with clarity, momentum and a bias for shipping \u2014 for studios, agencies and brands since 2014.</p>
-  <div class="side side--l"><h2>Capabilities</h2>{caps}</div>
-  <p class="side side--r">{facts}</p>
 </main>
 
 <button class="closeall" type="button">Put it back</button>
