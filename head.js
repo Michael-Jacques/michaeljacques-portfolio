@@ -12,10 +12,14 @@
   const rnd = (i, k) => { const x = Math.sin((i + 1) * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
 
   /* ---------- build the buttons ---------- */
-  const doodles = document.createElement('img');
-  doodles.className = 'spill__doodles'; doodles.src = P.doodles; doodles.alt = '';
-  doodles.setAttribute('aria-hidden', 'true');
-  spill.appendChild(doodles);
+  const doodles = [0, 1, 2, 3].map(k => {
+    const d = document.createElement('img');
+    d.className = 'spill__doodles'; d.src = P.doodles; d.alt = '';
+    d.setAttribute('aria-hidden', 'true');
+    d.style.setProperty('--dr', [-10, 166, 18, -150][k] + 'deg');
+    spill.appendChild(d);
+    return d;
+  });
 
   const nodes = P.items.map((it, i) => {
     const b = document.createElement('button');
@@ -24,8 +28,8 @@
     b.dataset.slug = it.slug;
     b.setAttribute('aria-label', it.title);
     b.style.setProperty('--r', ((rnd(i, 4) - .5) * 22).toFixed(1) + 'deg');
-    b.style.setProperty('--i', String(P.items.length - i));
-    b.style.setProperty('--from', (40 + rnd(i, 5) * 70).toFixed(0) + 'px');
+    b.style.setProperty('--i', String(i));                       // out: near the head first
+    b.style.setProperty('--back', String(P.items.length - i));   // in: furthest first
     b.innerHTML = `<img src="${P.base}${it.slug}.webp" alt="" loading="eager" decoding="async">`;
     b.addEventListener('click', e => { e.stopPropagation(); openCard(it); });
     spill.appendChild(b);
@@ -48,6 +52,8 @@
     wrap.style.setProperty('--cap-w', (capFrac * 100).toFixed(1) + '%');
     const capW = headW * capFrac, capH = capW / CAP_AR;
     const capTop = bar.bottom + (narrow ? 8 : 12);
+    // keep the hover hint clear of the cap, which sticks up past the face box
+    wrap.style.setProperty('--hint-lift', Math.round(capH * 0.56 + 14) + 'px');
     wrap.style.setProperty('--cap-open-y', Math.round(capTop - faceBox.top) + 'px');
 
     // items fill the whole page around the cap and the head
@@ -142,17 +148,28 @@
       clamp();
     }
 
+    // everything flies out of, and back into, this point: the open skull
+    const holeX = faceBox.left + faceBox.width / 2;
+    const holeY = faceBox.top + faceBox.height * 0.085;
+
     boxes.slice(0, n).forEach((bx, i) => {
       const el = nodes[i];
+      const px = field.l + bx.x, py = field.t + bx.y;
       el.style.setProperty('--w', Math.round(bx.w) + 'px');
-      el.style.setProperty('--x', Math.round(field.l + bx.x) + 'px');
-      el.style.setProperty('--y', Math.round(field.t + bx.y) + 'px');
+      el.style.setProperty('--x', Math.round(px) + 'px');
+      el.style.setProperty('--y', Math.round(py) + 'px');
+      el.style.setProperty('--dx', Math.round(holeX - px) + 'px');
+      el.style.setProperty('--dy', Math.round(holeY - py) + 'px');
     });
 
-    // the movement lines sit behind the items, covering the same field
-    doodles.style.setProperty('--dood-w', Math.round(Math.min(W * 0.78, headW * 3.4)) + 'px');
-    doodles.style.setProperty('--dood-t', Math.round(field.t + H * 0.04) + 'px');
-    doodles.style.left = '50%';
+    // small squiggle clusters, behind the items, scattered around the head
+    const dw = Math.round(Math.min(W * 0.155, headW * 0.62));
+    const spots = [[0.23, 0.26], [0.78, 0.30], [0.33, 0.76], [0.70, 0.72]];
+    doodles.forEach((d, k) => {
+      d.style.setProperty('--dw', dw + 'px');
+      d.style.setProperty('--dl', Math.round(field.l + W * spots[k][0]) + 'px');
+      d.style.setProperty('--dt', Math.round(field.t + H * spots[k][1]) + 'px');
+    });
   }
 
   layout();
