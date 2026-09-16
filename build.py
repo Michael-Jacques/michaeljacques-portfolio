@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generates index.html, about.html and case/<slug>.html from cases.json + templates."""
-import json, os, html as H
+import json, os, re, html as H
+import chat_content as CC
 
 SITE = {
   "name": "Michael Jacques",
@@ -50,7 +51,7 @@ def header(root, active):
   </div>
   <nav class="tabs" aria-label="Portfolio sections">
     <span class="tabs-indicator" aria-hidden="true"></span>
-    {tab('work','Work', root+'index.html')}
+    {tab('work','Work', root+'gallery.html')}
     {tab('about','About', root+'about.html')}
   </nav>
   <div class="header-contact" aria-label="Contact links">
@@ -58,6 +59,7 @@ def header(root, active):
     <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
     <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
   </div>
+  <a class="chat-link" href="{root}index.html" data-click-bounce><span class="chat-link__dot" aria-hidden="true"></span>Ask me anything</a>
   <button class="header-info-toggle" type="button" aria-label="Contact" aria-expanded="false"><span></span></button>
   <div class="header-info-panel" aria-hidden="true">
     <button class="email-copy" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
@@ -66,6 +68,13 @@ def header(root, active):
   </div>
 </header>
 <button class="header-info-scrim" tabindex="-1" aria-hidden="true"></button>'''
+
+
+def fab(root):
+    return f"""<a class="chat-fab" href="{root}index.html" aria-label="Ask the portfolio anything">
+  <span class="chat-fab__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="chat-fab__tip">Ask me anything</span>
+</a>"""
 
 def footer(root):
     return f'''<div class="footer-reveal"><footer class="site-footer" aria-label="Footer">
@@ -168,6 +177,7 @@ def index_page():
       </div>
     </section>
   </div>
+  {fab(root)}
   {footer(root)}
 </main>
 <script type="importmap">{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}}}</script>
@@ -231,6 +241,7 @@ def about_page():
       <div class="resume__contact"><span>{SITE['email']}</span><span>{SITE['phone']}</span><span>{SITE['location']}</span></div>
     </div>
   </section>
+  {fab(root)}
   {footer(root)}
 </main>
 <script src="main.js"></script>
@@ -250,7 +261,7 @@ def case_page(c, idx):
 <body>
 <main class="page page--case" data-case-id="{c['slug']}">
   {header(root, 'work')}
-  <a class="case-back" href="{root}index.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
+  <a class="case-back" href="{root}gallery.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
   <section class="case-open-hero" data-layout="center" aria-label="{plain_title(c)}">
     <div class="case-frame case-frame--open">
       <span class="case-number" aria-hidden="true">{'case '+num if num else 'archive'}</span>
@@ -279,15 +290,137 @@ def case_page(c, idx):
     <a class="case-next__link case-next__link--prev" href="{prv['slug']}.html" data-click-bounce><span class="case-next__kicker">Previous</span><span class="case-next__title">{plain_title(prv)}</span></a>
     <a class="case-next__link" href="{nxt['slug']}.html" data-click-bounce><span class="case-next__kicker">Next case</span><span class="case-next__title">{plain_title(nxt)}</span><span class="case-next__arrow" aria-hidden="true"></span></a>
   </nav>
+  {fab(root)}
   {footer(root)}
 </main>
 <script src="../main.js"></script>
 </body></html>'''
     return head(f"{plain_title(c)} — Michael Jacques", c.get('summary', c['body'][0]), root) + body
 
+
+# ---------------------------------------------------------------- chat view
+EXTRA_KW = {
+  "verizon-ride": ["verizon","ride","telly","led","puck","touch table","activation"],
+  "superblue": ["superblue","super blue","jr","niantic","miami art","gallery app","time magazine"],
+  "google-dei-site": ["google","games","dei","diversity","pledge","inclusiv"],
+  "meta-quest-dev-site": ["meta","quest","developer","oculus","vr site"],
+  "datarobot-event": ["datarobot","data robot","summit","booth","ai summit"],
+  "honda-website": ["honda","automobiles","configurator","dealer"],
+  "datarobot-aix": ["aix","virtual event","bizzabo","virtual summit"],
+  "datarobot-roadshow": ["roadshow","road show","9.0","15 cities","lunch and learn"],
+  "facebook-portal": ["portal","facebook","reality labs","conversational","assistant"],
+  "meta-quest-social": ["quest social","social campaign","developer social"],
+  "crafted-la": ["crafted","pac sun","pacsun","urban outfitters","capsule","apparel","candle","jane fonda"],
+  "acura-website": ["acura","luxury vehicle"],
+  "zimmerman-advertising": ["zimmerman","dealership","dealer group","keyes","paid search"],
+  "mr-305": ["305","mr 305","pitbull","record label","album","merch","miami label"],
+}
+
+def chat_data():
+    projects = []
+    for c in ALL:
+        words = set(EXTRA_KW.get(c['slug'], []))
+        words.add(c['slug'].replace('-', ' '))
+        words.add(c['client'].lower())
+        projects.append(dict(
+            slug=c['slug'], client=c['client'], title=c['title'], plain=plain_title(c),
+            summary=c.get('summary', c['body'][0])[:190],
+            body=c['body'][:1], meta=c['meta'][:2], tags=c['tags'],
+            kw=sorted(w for w in words if len(w) > 2),
+        ))
+    data = dict(
+        projects=projects,
+        intents=[dict(id=i['id'], kw=i['kw'], w=i.get('w', 1), a=i['a'],
+                      cards=i.get('cards', []), chips=i.get('chips', [])) for i in CC.INTENTS],
+        starters=CC.STARTERS,
+        projectChips=CC.PROJECT_CHIPS,
+        logo=LOGO_SVG,
+    )
+    return 'window.MJ=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n'
+
+def chat_page():
+    H_ = CC.HERO
+    starters = ''.join(f'<button type="button">{H.escape(s)}</button>' for s in CC.STARTERS)
+    return f'''<!doctype html>
+<html lang="en" data-mode="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Michael Jacques — Ask the Portfolio</title>
+<meta name="description" content="A conversational portfolio. Ask Michael Jacques about the projects, the clients and how a production actually runs." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Michael Jacques — Ask the Portfolio" />
+<meta property="og:description" content="A conversational portfolio. Ask about the projects, the clients and how a production actually runs." />
+<meta property="og:image" content="{SITE['url']}/assets/og.png" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+<div class="chat-shell">
+  <header class="chat-header">
+    <a class="brand" href="index.html" aria-label="Michael Jacques">{LOGO_SVG}<span class="brand__name">Michael Jacques</span></a>
+    <div class="header-tools">
+      <button class="icon-btn" id="mode" type="button" aria-label="Toggle light and dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+      </button>
+      <a class="view-link" href="gallery.html">Classic view
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </header>
+
+  <div class="chat-scroll">
+    <div class="chat-inner">
+      <section class="hero">
+        <h1>{H.escape(H_['pre'])} <span class="hl">{H.escape(H_['highlight'])}</span> {H.escape(H_['post'])}</h1>
+        <p>{H.escape(H_['sub'])}</p>
+        <div class="hero__meta">
+          <span><b>12</b> years producing</span>
+          <span><b>Google · Meta · Amazon</b></span>
+          <span><b>Telly</b> winner</span>
+          <span>Los Angeles</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="composer-wrap">
+    <button class="starters-btn" type="button" aria-haspopup="true" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:13px;height:13px"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-8.1A8.4 8.4 0 1 1 21 11.5z"/></svg>
+      Not sure what to ask?
+    </button>
+    <div class="starters" role="menu" aria-label="Conversation starters">
+      <h2>Try one of these</h2>
+      {starters}
+    </div>
+    <form class="composer" autocomplete="off">
+      <button class="pulse" type="submit" aria-label="Send">
+        <span class="pulse__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <label class="field">
+        <span class="sr-only">Ask about Michael's work</span>
+        <input id="ask" name="ask" type="text" placeholder="Ask about a project, a client, the process…" />
+        <button class="send" type="submit" aria-label="Send question">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </label>
+    </form>
+    <p class="composer__note">Curated answers from Michael's own case notes · <a href="gallery.html" style="color:inherit">browse the classic portfolio</a></p>
+  </div>
+</div>
+<script src="chat-data.js"></script>
+<script src="chat.js"></script>
+</body></html>'''
+
 os.makedirs('case', exist_ok=True)
-open('index.html', 'w').write(index_page())
+open('gallery.html', 'w').write(index_page())
+open('chat-data.js', 'w').write(chat_data())
+open('index.html', 'w').write(chat_page())
 open('about.html', 'w').write(about_page())
 for i, c in enumerate(ALL):
     open(f'case/{c["slug"]}.html', 'w').write(case_page(c, i))
-print('built', 2 + len(ALL), 'pages')
+print('built', 3 + len(ALL), 'pages')

@@ -59,7 +59,7 @@ img { display:block; max-width:100% }
   transition:opacity .62s cubic-bezier(.22,1,.36,1), transform .76s cubic-bezier(.22,1,.36,1) }
 html.is-ready .brand-area, html.is-ready .tabs, html.is-ready .header-contact { opacity:1; transform:none }
 
-.site-header :is(.logo,.header-location,.tabs-indicator,.tab,.email-copy,.social-link) {
+.site-header :is(.logo,.header-location,.tabs-indicator,.tab,.email-copy,.social-link,.chat-link) {
   --contour-ink:linear-gradient(to bottom, var(--header-ink) 0, var(--header-ink) var(--fill-local-y), var(--footer-header-ink) var(--fill-local-y), var(--footer-header-ink) 100%);
   --contour-hover:linear-gradient(to bottom, var(--header-hover-ink) 0, var(--header-hover-ink) var(--fill-local-y), var(--footer-header-hover) var(--fill-local-y), var(--footer-header-hover) 100%);
   --contour-active-ink:linear-gradient(to bottom, var(--active-tab-ink) 0, var(--active-tab-ink) var(--fill-local-y), var(--footer-active-tab-ink) var(--fill-local-y), var(--footer-active-tab-ink) 100%);
@@ -404,9 +404,9 @@ html[data-last-case-docked] .case-divider-pin { opacity:1 }
     border-bottom:1px solid transparent; grid-template-columns:auto 1fr auto }
   html[data-scrolled] .site-header { border-bottom-color:var(--divider-color) }
   .site-header:before { display:none }
-  .site-header :is(.logo,.header-location,.tabs-indicator,.tab,.email-copy,.social-link) { --contour-ink:linear-gradient(#000,#000); --contour-hover:linear-gradient(#db0508,#db0508); --contour-active-ink:linear-gradient(#fff,#fff); --contour-active-bg:linear-gradient(#000,#000) }
+  .site-header :is(.logo,.header-location,.tabs-indicator,.tab,.email-copy,.social-link,.chat-link) { --contour-ink:linear-gradient(#000,#000); --contour-hover:linear-gradient(#db0508,#db0508); --contour-active-ink:linear-gradient(#fff,#fff); --contour-active-bg:linear-gradient(#000,#000) }
   html[data-header-black] .site-header { background:var(--footer-header-bg); border-bottom-color:transparent }
-  html[data-header-black] .site-header :is(.logo,.tab,.tabs-indicator) { --contour-ink:linear-gradient(#fff,#fff); --contour-active-ink:linear-gradient(#000,#000); --contour-active-bg:linear-gradient(#fff,#fff) }
+  html[data-header-black] .site-header :is(.logo,.tab,.tabs-indicator,.chat-link) { --contour-ink:linear-gradient(#fff,#fff); --contour-active-ink:linear-gradient(#000,#000); --contour-active-bg:linear-gradient(#fff,#fff) }
   html[data-header-black] .header-info-toggle { background:#fff } html[data-header-black] .header-info-toggle span, html[data-header-black] .header-info-toggle span:before { background:#000 }
   .header-location, .header-contact { display:none }
   .brand-area { gap:10px } .tabs { gap:8px } .tab { font-size:.92rem; padding:0 8px; min-height:22px } .tabs-indicator { height:22px }
@@ -468,3 +468,37 @@ html[data-last-case-docked] .case-divider-pin { opacity:1 }
   .case-open-hero .case-device { top:4% !important; bottom:auto !important }
   .case-page-body__inner { grid-template-columns:1fr } .case-next { grid-template-columns:1fr } .case-next__link--prev { border-right:0; border-bottom:1px solid var(--case-frame-line) }
 }
+
+/* ---------- cross-view: chat link in header + floating chat button ---------- */
+.chat-link { display:inline-flex; align-items:center; gap:.5em; padding:7px 14px 6px; border:1px solid currentColor;
+  border-radius:999px; text-decoration:none; font:600 .7rem/1 Montserrat,sans-serif; letter-spacing:.06em;
+  text-transform:uppercase; white-space:nowrap; justify-self:end; grid-column:3;
+  background-image:var(--contour-ink); -webkit-background-clip:text; background-clip:text; color:transparent;
+  border-color:var(--divider-color); transition:background-color .2s, border-color .2s, color .2s }
+.site-header { grid-template-columns:1fr auto 1fr }
+.header-contact { display:none }
+.chat-link__dot { width:6px; height:6px; border-radius:50%; background:var(--theme-accent-red); flex:0 0 auto;
+  animation:chat-dot 2.4s infinite ease-in-out }
+@keyframes chat-dot { 0%,100%{opacity:.45;transform:scale(.85)} 50%{opacity:1;transform:scale(1)} }
+.chat-link:hover { -webkit-text-fill-color:#fff; color:#fff; background-color:#000; border-color:#000; background-image:none }
+.page--about .chat-link, .page--case .chat-link { color:transparent }
+
+.chat-fab { position:fixed; right:clamp(14px,2.4vw,28px); bottom:clamp(14px,2.4vw,28px); z-index:40;
+  display:inline-flex; align-items:center; gap:0; width:54px; height:54px; border-radius:999px; overflow:hidden;
+  background:var(--theme-accent-red); color:#fff; text-decoration:none; box-shadow:0 18px 40px -16px rgba(0,0,0,.55);
+  transition:width .38s cubic-bezier(.22,1,.36,1), background-color .2s }
+.chat-fab__bars { flex:0 0 54px; display:flex; align-items:flex-end; justify-content:center; gap:3px; height:17px; margin:0 auto }
+.chat-fab__bars i { width:3px; background:#fff; border-radius:2px; height:40%; animation:fab-bar 1s infinite ease-in-out }
+.chat-fab__bars i:nth-child(2){animation-delay:.14s} .chat-fab__bars i:nth-child(3){animation-delay:.28s} .chat-fab__bars i:nth-child(4){animation-delay:.42s}
+@keyframes fab-bar { 0%,100%{height:35%} 50%{height:100%} }
+.chat-fab__tip { white-space:nowrap; font:600 .74rem/1 Montserrat,sans-serif; letter-spacing:.04em; padding-right:20px; opacity:0;
+  transition:opacity .28s ease }
+.chat-fab:hover { width:186px; background:#000 }
+.chat-fab:hover .chat-fab__tip { opacity:1 }
+@media (max-width:760px) {
+  .chat-link { display:none }
+  .chat-fab { right:14px; bottom:14px; width:48px; height:48px }
+  .chat-fab__bars { flex-basis:48px }
+  .chat-fab:hover { width:48px } .chat-fab:hover .chat-fab__tip { opacity:0 }
+}
+@media (prefers-reduced-motion:reduce) { .chat-fab__bars i, .chat-link__dot { animation:none } }
