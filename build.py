@@ -436,11 +436,17 @@ ITEM_BLURB = {
 }
 
 def head_data():
+    from PIL import Image
     items = []
     for c in ALL:
+        p = f"assets/head/items/{c['slug']}.png"
+        ar = 1.0
+        if os.path.exists(p):
+            w, h = Image.open(p).size
+            ar = round(w / h, 3)
         items.append(dict(slug=c['slug'], client=c['client'], title=plain_title(c),
                           blurb=ITEM_BLURB.get(c['slug'], c.get('summary', '')),
-                          meta=c['meta'][:2]))
+                          meta=c['meta'][:2], ar=ar))
     return 'window.MJ_HEAD=' + json.dumps(dict(
         items=items, base='assets/head/items/', art='assets/items/', doodles='assets/head/doodles.webp'
     ), ensure_ascii=False, separators=(',', ':')) + ';\n'
