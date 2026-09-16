@@ -8,13 +8,16 @@ DST = 'dist'
 if os.path.exists(DST): shutil.rmtree(DST)
 os.makedirs(DST)
 
-for f in ['index.html', 'gallery.html', 'about.html', 'styles.css', 'chat.css', 'main.js', 'hero.js', 'chat.js', 'chat-data.js']:
+for f in ['index.html', 'gallery.html', 'wheel.html', 'about.html', 'styles.css', 'chat.css', 'head.css',
+          'main.js', 'hero.js', 'chat.js', 'chat-data.js', 'head.js', 'head-data.js']:
     shutil.copy(f, DST)
 shutil.copytree('case', DST + '/case')
 os.makedirs(DST + '/assets', exist_ok=True)
-for d in ['icons', 'cards', 'characters']:
+for d in ['icons', 'cards', 'characters', 'items', 'head']:
     shutil.copytree(f'assets/{d}', f'{DST}/assets/{d}')
 shutil.copy('assets/og.png', DST + '/assets/og.png')
+for p in glob.glob(f'{DST}/assets/head/**/*.png', recursive=True) + glob.glob(f'{DST}/assets/items/*.png'):
+    os.remove(p)
 
 mapping = {}
 for p in sorted(glob.glob('assets/work/*/*')):

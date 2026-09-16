@@ -416,11 +416,108 @@ def chat_page():
 <script src="chat.js"></script>
 </body></html>'''
 
+
+# ---------------------------------------------------- classic view (open head)
+ITEM_BLURB = {
+ "verizon-ride": "An award-winning immersive activation: LED floor, LED walls and a 70-inch touch table driven by a physical puck. Move the puck, the whole room answers.",
+ "superblue": "An app that made experiential art participatory \u2014 built with Niantic and the artist JR, so people could leave photos and notes in AR at real locations.",
+ "google-dei-site": "A Google for Games site that turned a DEI message into action: pledge your support, download a share asset, pass it on.",
+ "meta-quest-dev-site": "The Meta Quest developer site redesign, with an illustrated system built out of the Quest gradient and carried across every page.",
+ "datarobot-event": "A booth we designed and fabricated: private demo stations, a merch and check-in stand, and a mini theatre. It toured the biggest events in AI.",
+ "honda-website": "Four years on honda.com across two agencies and two redesign systems \u2014 inventory tools, payment estimators, a build-your-own configurator.",
+ "datarobot-aix": "The fully virtual summit. Live sessions, chat, on-demand content and analytics across the whole event, run on Bizzabo.",
+ "datarobot-roadshow": "The 9.0 launch taken to 15+ cities with partners like Google, EY and Amazon. Locations, swag, scheduling and a site for every stop.",
+ "facebook-portal": "Conversational design for the Facebook Reality Labs team: product concepts, designs and full UX prototypes for Portal.",
+ "meta-quest-social": "The Quest developer system carried into social \u2014 product announcements, feature updates and event recaps, on short deadlines.",
+ "crafted-la": "Apparel and candle concepts for Pac Sun, Urban Outfitters and Fashion Nova, plus the celebrity capsule collections behind them.",
+ "acura-website": "The luxury counterpart to Honda: fewer vehicles, far richer content per vehicle, and a site built to make that feel effortless.",
+ "zimmerman-advertising": "Paid social and search for dealer groups at ~$20k a month per client, with A/B testing that delivered 25% more optimized spend.",
+ "mr-305": "Where it started \u2014 Pitbull's label in Miami. Album covers, merch, banner ads and social, promoted to millions.",
+}
+
+def head_data():
+    items = []
+    for c in ALL:
+        items.append(dict(slug=c['slug'], client=c['client'], title=plain_title(c),
+                          blurb=ITEM_BLURB.get(c['slug'], c.get('summary', '')),
+                          meta=c['meta'][:2]))
+    return 'window.MJ_HEAD=' + json.dumps(dict(
+        items=items, base='assets/head/items/', art='assets/items/', doodles='assets/head/doodles.webp'
+    ), ensure_ascii=False, separators=(',', ':')) + ';\n'
+
+CAPABILITIES = ["Production &amp; delivery", "RFP and pitch decks", "Budgets and schedules",
+                "AR / VR experiences", "Experiential &amp; events", "Web at scale",
+                "Social campaigns", "Cross-functional teams"]
+FACTS = ["Interactive Producer at Left Field Labs", "Google, Meta, Amazon, DataRobot, Superblue",
+         "Telly Award for Verizon RIDE", "Four years on honda.com",
+         "15+ cities on one roadshow", "Started at Pitbull's label in Miami"]
+
+def gallery_page():
+    caps = ''.join(f'<a href="#open">{c}</a>' for c in CAPABILITIES)
+    facts = '<br>'.join(FACTS)
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Michael Jacques \u2014 What\u2019s In My Head</title>
+<meta name="description" content="Open the head and every project Michael Jacques has produced falls out. Click one to read the case." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Michael Jacques \u2014 What\u2019s In My Head" />
+<meta property="og:description" content="Open the head and every project falls out. Click one to read the case." />
+<meta property="og:image" content="{SITE['url']}/assets/og.png" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700;800&display=swap" />
+<link rel="stylesheet" href="head.css" />
+</head>
+<body>
+<header class="bar">
+  <a class="bar__brand" href="index.html" aria-label="Michael Jacques">{LOGO_SVG}<span>Michael Jacques</span></a>
+  <nav class="bar__nav" aria-label="Sections">
+    <a href="#open">Work</a>
+    <a href="about.html">About</a>
+    <a href="mailto:{SITE['email']}">Contact</a>
+    <a class="is-red" href="index.html">Ask me anything</a>
+  </nav>
+</header>
+
+<main class="stage">
+  <p class="yearword yearword--l" aria-hidden="true"><small>Producing since</small>20</p>
+
+  <div class="headwrap">
+    <div class="spill" aria-hidden="false"></div>
+    <button class="head" type="button" aria-expanded="false" aria-label="Open my head and see the work">
+      <span class="head__hint">Ever wondered what\u2019s in my head?</span>
+      <img class="head__face" src="assets/head/head-open.webp" alt="Illustration of Michael Jacques" width="793" height="1048" />
+      <img class="head__cap" src="assets/head/cap.webp" alt="" aria-hidden="true" />
+    </button>
+  </div>
+
+  <p class="yearword yearword--r" aria-hidden="true">14</p>
+
+  <p class="thesis">Shaping digital work with clarity, momentum and a bias for shipping \u2014 for studios, agencies and brands since 2014.</p>
+  <div class="side side--l"><h2>Capabilities</h2>{caps}</div>
+  <p class="side side--r">{facts}</p>
+</main>
+
+<button class="closeall" type="button">Put it back</button>
+<div class="cardveil" aria-live="polite"></div>
+
+<script src="head-data.js"></script>
+<script src="head.js"></script>
+</body></html>'''
+
 os.makedirs('case', exist_ok=True)
-open('gallery.html', 'w').write(index_page())
+open('wheel.html', 'w').write(index_page())
+open('gallery.html', 'w').write(gallery_page())
+open('head-data.js', 'w').write(head_data())
 open('chat-data.js', 'w').write(chat_data())
 open('index.html', 'w').write(chat_page())
 open('about.html', 'w').write(about_page())
 for i, c in enumerate(ALL):
     open(f'case/{c["slug"]}.html', 'w').write(case_page(c, i))
-print('built', 3 + len(ALL), 'pages')
+print('built', 5 + len(ALL), 'pages')
