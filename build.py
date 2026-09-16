@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 """Generates index.html (the head), ask.html (the chat), about.html and case/<slug>.html."""
-import json, os, re, html as H
+import json, os, re, hashlib, html as H
 import chat_content as CC
+
+_HASH = {}
+def v(path):
+    """Append a short content hash so browsers pick up every deploy."""
+    if path not in _HASH:
+        try:
+            _HASH[path] = hashlib.md5(open(path, 'rb').read()).hexdigest()[:8]
+        except OSError:
+            _HASH[path] = '0'
+    return f"{path}?v={_HASH[path]}"
 
 SITE = {
   "name": "Michael Jacques",
@@ -12,6 +22,15 @@ SITE = {
   "year": "2026",
   "url": "https://www.michaeljacques.work",
 }
+from urllib.parse import quote as _q
+
+def mailto(subject="Hello from michaeljacques.work"):
+    """Every contact route on the site goes through here."""
+    return f"mailto:{SITE['email']}?subject={_q(subject)}"
+
+def telto():
+    return 'tel:+1' + ''.join(ch for ch in SITE['phone'] if ch.isdigit())
+
 D = json.load(open('cases.json'))
 ALL = D['featured'] + D['archive']
 
@@ -36,7 +55,7 @@ def head(title, desc, root, extra=''):
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;800;900&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,600;1,700;1,800&family=Poppins:wght@400;500;600&display=swap" />
-<link rel="stylesheet" href="{root}styles.css" />
+<link rel="stylesheet" href="{root}{v('styles.css')}" />
 {extra}
 </head>'''
 
@@ -56,14 +75,14 @@ def header(root, active):
   </nav>
   <div class="header-contact" aria-label="Contact links">
     <button class="email-copy" type="button" data-click-burst data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
-    <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
+    <a class="social-link social-link--mail" href="{mailto()}" aria-label="Email Michael" data-click-bounce></a>
     <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
   </div>
   <a class="chat-link" href="{root}ask.html" data-click-bounce><span class="chat-link__dot" aria-hidden="true"></span>Ask me anything</a>
   <button class="header-info-toggle" type="button" aria-label="Contact" aria-expanded="false"><span></span></button>
   <div class="header-info-panel" aria-hidden="true">
     <button class="email-copy" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
-    <a class="social-link social-link--mail" href="mailto:{SITE['email']}" aria-label="Email"></a>
+    <a class="social-link social-link--mail" href="{mailto()}" aria-label="Email Michael"></a>
     <a class="social-link social-link--linkedin" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn"></a>
   </div>
 </header>
@@ -80,12 +99,12 @@ def footer(root):
     return f'''<div class="footer-reveal"><footer class="site-footer" aria-label="Footer">
   <div class="footer-contact" aria-label="Footer contact links">
     <button class="email-copy footer-email" type="button" data-email="{SITE['email']}"><span>{SITE['email']}</span></button>
-    <a class="social-link social-link--mail footer-social" href="mailto:{SITE['email']}" aria-label="Email" data-click-bounce></a>
+    <a class="social-link social-link--mail footer-social" href="{mailto()}" aria-label="Email Michael" data-click-bounce></a>
     <a class="social-link social-link--linkedin footer-social" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-click-bounce></a>
   </div>
   <a class="footer-logo" href="{root}index.html" data-click-burst aria-label="Michael Jacques">{LOGO_SVG}</a>
   <div class="footer-bottom"><p class="footer-year" data-click-burst>{SITE['year']}</p>
-    <div class="footer-socials"><a class="social-link social-link--mail footer-social" href="mailto:{SITE['email']}" aria-label="Email"></a><a class="social-link social-link--linkedin footer-social" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn"></a></div>
+    <div class="footer-socials"><a class="social-link social-link--mail footer-social" href="{mailto()}" aria-label="Email Michael"></a><a class="social-link social-link--linkedin footer-social" href="{SITE['linkedin']}" target="_blank" rel="noreferrer" aria-label="LinkedIn"></a></div>
   </div>
 </footer></div>'''
 
@@ -181,8 +200,8 @@ def index_page():
   {footer(root)}
 </main>
 <script type="importmap">{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}}}</script>
-<script src="main.js"></script>
-<script type="module" src="hero.js"></script>
+<script src="{root}{v('main.js')}"></script>
+<script type="module" src="{root}{v('hero.js')}"></script>
 </body></html>'''
     return head("Michael Jacques — Portfolio", "Digital Manager. Creative Producer. Web, apps, AR and experiential for Google, Meta, Amazon, Honda and more.", root) + body
 
@@ -239,15 +258,15 @@ def about_page():
   {header(root, 'about')}
   <section class="resume" aria-label="Resume">
     <div class="resume__inner">
-      <div class="resume__head"><span class="case-number">experience</span><a class="case-button case-button--small" href="mailto:{SITE['email']}" data-click-bounce>Get in touch</a></div>
+      <div class="resume__head"><span class="case-number">experience</span><a class="case-button case-button--small" href="{mailto('Work together?')}" data-click-bounce>Get in touch</a></div>
       <ol class="resume__list">{jobs}</ol>
-      <div class="resume__contact"><span>{SITE['email']}</span><span>{SITE['phone']}</span><span>{SITE['location']}</span></div>
+      <div class="resume__contact"><a href="{mailto('Work together?')}">{SITE['email']}</a><a href="{telto()}">{SITE['phone']}</a><span>{SITE['location']}</span></div>
     </div>
   </section>
   {fab(root)}
   {footer(root)}
 </main>
-<script src="main.js"></script>
+<script src="{root}{v('main.js')}"></script>
 </body></html>'''
     return head("About — Michael Jacques", "Freelance producer and designer in Fort Lauderdale working across AI, design, marketing and development.", root) + body
 
@@ -264,6 +283,7 @@ def case_page(c, idx):
 <body>
 <main class="page page--case" data-case-id="{c['slug']}">
   {header(root, 'work')}
+  <a class="case-contact" href="{mailto('About ' + plain_title(c))}" data-click-bounce>Ask about this project</a>
   <a class="case-back" href="{root}index.html#{c['slug']}" data-click-bounce><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M12 5l-7 7 7 7"/></svg><span class="case-back__label">Gallery</span></a>
   <section class="case-open-hero" data-layout="center" aria-label="{plain_title(c)}">
     <div class="case-frame case-frame--open">
@@ -296,7 +316,7 @@ def case_page(c, idx):
   {fab(root)}
   {footer(root)}
 </main>
-<script src="../main.js"></script>
+<script src="{root}{v('main.js')}"></script>
 </body></html>'''
     return head(f"{plain_title(c)} — Michael Jacques", c.get('summary', c['body'][0]), root) + body
 
@@ -361,7 +381,7 @@ def chat_page():
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" />
-<link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="{v('chat.css')}" />
 </head>
 <body>
 <div class="chat-shell">
@@ -371,6 +391,9 @@ def chat_page():
       <button class="icon-btn" id="mode" type="button" aria-label="Toggle light and dark">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
       </button>
+      <a class="icon-btn" href="{mailto()}" aria-label="Email Michael" title="Email Michael">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.8 2.5h12.4c.7 0 1.3.6 1.3 1.3v8.4c0 .7-.6 1.3-1.3 1.3H1.8c-.7 0-1.3-.6-1.3-1.3V3.8c0-.7.6-1.3 1.3-1.3zm.4 1.6v.6L8 8.7l5.8-4V4.1zm0 2.5v5.3h11.6V6.6L8 10.5z"/></svg>
+      </a>
       <a class="view-link" href="index.html">Classic view
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
     </div>
@@ -415,8 +438,8 @@ def chat_page():
     <p class="composer__note">Curated answers from Michael's own case notes · <a href="index.html" style="color:inherit">browse the classic portfolio</a></p>
   </div>
 </div>
-<script src="chat-data.js"></script>
-<script src="chat.js"></script>
+<script src="{v('chat-data.js')}"></script>
+<script src="{v('chat.js')}"></script>
 </body></html>'''
 
 
@@ -472,14 +495,14 @@ def gallery_page():
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700;800&display=swap" />
-<link rel="stylesheet" href="head.css" />
+<link rel="stylesheet" href="{v('head.css')}" />
 </head>
 <body>
 <header class="bar">
   <a class="bar__brand" href="index.html" aria-label="Michael Jacques">{LOGO_SVG}<span>Michael Jacques</span></a>
   <nav class="bar__nav" aria-label="Sections">
     <a href="about.html">About</a>
-    <a href="mailto:{SITE['email']}">Contact</a>
+    <a href="{mailto()}">Contact</a>
     <a class="is-red" href="ask.html">Ask me anything</a>
   </nav>
 </header>
@@ -498,11 +521,14 @@ def gallery_page():
 <button class="closeall" type="button">Put it back</button>
 <div class="cardveil" aria-live="polite"></div>
 
-<script src="head-data.js"></script>
-<script src="head.js"></script>
+<script src="{v('head-data.js')}"></script>
+<script src="{v('head.js')}"></script>
 </body></html>'''
 
 os.makedirs('case', exist_ok=True)
+# data files first: the pages hash them for cache-busting
+open('chat-data.js', 'w').write(chat_data())
+open('head-data.js', 'w').write(head_data())
 open('wheel.html', 'w').write(index_page())
 open('index.html', 'w').write(gallery_page())
 open('gallery.html', 'w').write(
@@ -511,8 +537,6 @@ open('gallery.html', 'w').write(
   '<meta http-equiv="refresh" content="0; url=index.html">'
   '<script>location.replace("index.html"+location.hash)</script></head>'
   '<body><a href="index.html">Continue to michaeljacques.work</a></body></html>')
-open('head-data.js', 'w').write(head_data())
-open('chat-data.js', 'w').write(chat_data())
 open('ask.html', 'w').write(chat_page())
 open('about.html', 'w').write(about_page())
 for i, c in enumerate(ALL):

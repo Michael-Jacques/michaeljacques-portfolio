@@ -326,6 +326,14 @@ html[data-last-case-docked] .case-divider-pin { opacity:1 }
 .case-back svg { width:14px; height:14px }
 .case-back:hover { background:#fff; color:#000; mix-blend-mode:difference }
 .case-open-hero { clear:both }
+.case-contact { position:sticky; top:calc(var(--header-height) + 10px); z-index:30; float:right; clear:none;
+  margin:clamp(12px,2vh,20px) var(--case-frame-page-pad) clamp(6px,1vh,12px) 0;
+  display:inline-flex; align-items:center; gap:.5em; padding:.55em .95em .5em; border:1.5px solid var(--theme-accent-red);
+  border-radius:999px; background:transparent; color:var(--theme-accent-red); text-decoration:none;
+  font:600 .78rem/1 Montserrat,sans-serif; letter-spacing:.04em; text-transform:uppercase;
+  transition:background-color .2s, color .2s }
+.case-contact:hover { background:var(--theme-accent-red); color:#fff }
+@media (max-width:760px) { .case-contact { margin-right:14px; font-size:.68rem; padding:.5em .8em .45em } }
 .case-open-hero { display:block; padding:0 var(--case-frame-page-pad) clamp(10px,2vh,24px) }
 .case-open-hero .case-frame { width:100%; height:auto; pointer-events:auto; overflow:visible;
   display:grid; grid-template-rows:auto auto; align-content:start; justify-items:center;

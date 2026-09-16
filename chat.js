@@ -79,6 +79,11 @@
       '<p>' + par
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        // every contact route on the page is a real link
+        .replace(/([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})/gi,
+                 '<a href="mailto:$1?subject=' + encodeURIComponent('Hello from michaeljacques.work') + '">$1</a>')
+        .replace(/\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})/g,
+                 '<a href="tel:+1$1$2$3">($1) $2-$3</a>')
         .replace(/\n/g, '<br>') + '</p>').join('');
   }
 
