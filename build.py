@@ -5,7 +5,7 @@ import chat_content as CC
 
 SITE = {
   "name": "Michael Jacques",
-  "location": "Los Angeles, CA",
+  "location": "Fort Lauderdale, FL",
   "email": "michaelsjacques@gmail.com",
   "phone": "(954) 647-9037",
   "linkedin": "https://www.linkedin.com/in/michaeljacques",
@@ -187,11 +187,23 @@ def index_page():
     return head("Michael Jacques — Portfolio", "Digital Manager. Creative Producer. Web, apps, AR and experiential for Google, Meta, Amazon, Honda and more.", root) + body
 
 RESUME = [
- ("Left Field Labs", "Interactive Producer", "08/2021 – Present", "Google, Meta, Amazon, DataRobot, Superblue",
-  ["Produce a variety of projects including AR, VR, app and website development and interactive experiences.",
-   "Ideate, structure and respond to RFPs with budget, schedule and concept pitch decks.",
-   "Create schedules, run meetings, determine burn rates and problem-solve all facets of a project.",
-   "Manage multiple projects at once as the primary producer lead."]),
+ ("Independent", "Freelance Producer, Designer &amp; Developer", "2025 – Present", "Tech, retail and entertainment",
+  ["Build AI-assisted tools and prototypes: conversational interfaces, generated-image and video pipelines, and internal automations that take repetitive work off a team's plate.",
+   "Design and ship digital products end to end, from the first wireframe through the live build.",
+   "Run marketing programs across lifecycle and CRM, paid social, content systems and the reporting that says what to do next.",
+   "Produce the work as well as make it: scope, budget, schedule and the vendor wrangling that keeps a launch on its date."]),
+ ("Level Studios", "Digital Producer, Contract", "03/2024 – 12/2024", "A high-profile technology company",
+  ["Produced digital work for a major technology client on a remote, contract basis out of Miami.",
+   "Ran delivery across creative, design and engineering partners to keep releases on schedule."]),
+ ("Media.Monks", "Senior Program Manager, Lifecycle, Contract", "09/2023 – 12/2023", "Meta (embedded)",
+  ["Led cross-functional teams to execute CRM campaigns, increasing customer engagement and improving retention through data-driven strategies.",
+   "Managed and developed product marketing initiatives, enhancing customer re-engagement and improving affordability for targeted segments.",
+   "Collaborated with creative, performance marketing and analytics teams to build integrated marketing solutions that addressed customer needs and boosted loyalty."]),
+ ("Left Field Labs", "Interactive Producer", "08/2021 – 08/2023", "Google, Meta, Amazon, DataRobot, Superblue",
+  ["Produced a variety of projects including AR, VR, app and website development and interactive experiences.",
+   "Ideated, structured and responded to RFPs with budget, schedule and concept pitch decks.",
+   "Created schedules, ran meetings, determined burn rates and problem-solved all facets of a project.",
+   "Managed multiple projects at once as the primary producer lead."]),
  ("Crafted.LA", "Marketing Manager", "05/2020 – 09/2021", "Jane Fonda, Pac Sun, Urban Outfitters, Weelicious, Untitled Talent Agency",
   ["Facilitated celebrity capsule collections with initial creative proposal, deal structure and marketing plans.",
    "Created and maintained WordPress and Shopify stores while working with the fulfillment center on order requests.",
@@ -211,7 +223,7 @@ RESUME = [
   ["Managed each client's digital strategy, including Google paid search, social ads and website content, at ~$20k per month.",
    "Implemented A/B testing on paid social campaigns and reported weekly, resulting in 25% more optimized spend.",
    "Executed multiple Google AdWords campaigns from conception to execution."]),
- ("Mr. 305 Inc.", "Marketing Coordinator & Designer", "Miami, FL", "Pitbull's record label",
+ ("Mr. 305 Inc.", "Marketing Coordinator &amp; Designer", "Miami, FL", "Pitbull's record label",
   ["Handled website updates, social posts, album covers, merchandise and banner ads for digital and physical products promoted to millions."]),
 ]
 
@@ -237,7 +249,7 @@ def about_page():
 </main>
 <script src="main.js"></script>
 </body></html>'''
-    return head("About — Michael Jacques", "Digital Manager and Creative Producer in Los Angeles. Google, Meta, Amazon, Honda, DataRobot, Superblue.", root) + body
+    return head("About — Michael Jacques", "Freelance producer and designer in Fort Lauderdale working across AI, design, marketing and development.", root) + body
 
 def case_page(c, idx):
     root = '../'
@@ -373,7 +385,7 @@ def chat_page():
           <span><b>12</b> years producing</span>
           <span><b>Google · Meta · Amazon</b></span>
           <span><b>Telly</b> winner</span>
-          <span>Los Angeles</span>
+          <span>Fort Lauderdale</span>
         </div>
       </section>
     </div>

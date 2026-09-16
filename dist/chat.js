@@ -25,20 +25,28 @@
 
   /* ---------- matching ---------- */
   const norm = s => ' ' + s.toLowerCase().replace(/[^a-z0-9\s/&.+-]/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // whole words only, with light inflections — otherwise "yo" matches inside "you"
+  const reCache = {};
+  const has = (q, k) => {
+    let re = reCache[k];
+    if (!re) re = reCache[k] = new RegExp('(?:^|\\s)' + esc(k) + '(?:s|es|ing|ed)?(?=\\s|$)');
+    return re.test(q);
+  };
 
   function match(qRaw) {
     const q = norm(qRaw);
     let best = null, bestScore = 0;
     for (const it of D.intents) {
       let score = 0;
-      for (const k of it.kw) if (q.includes(' ' + k) || q.includes(k + ' ') || q.includes(k)) score += (it.w || 1) * (k.length > 6 ? 1.4 : 1);
+      for (const k of it.kw) if (has(q, k)) score += (it.w || 1) * (k.length > 6 ? 1.4 : 1);
       if (score > bestScore) { bestScore = score; best = it; }
     }
     // a named project beats a generic intent
     let proj = null, projScore = 0;
     for (const p of D.projects) {
       let s = 0;
-      for (const k of p.kw) if (q.includes(k)) s += k.length > 5 ? 3 : 2;
+      for (const k of p.kw) if (has(q, k)) s += k.length > 5 ? 3 : 2;
       if (s > projScore) { projScore = s; proj = p; }
     }
     if (proj && projScore >= bestScore) return { kind: 'project', project: proj };
