@@ -48,7 +48,7 @@
     const narrow = matchMedia('(max-width:860px)').matches;
 
     // the cap flies to the very top, centred on the page
-    const capFrac = narrow ? 0.74 : 0.96;
+    const capFrac = 0.96;   // same proportion to the head at every width
     wrap.style.setProperty('--cap-w', (capFrac * 100).toFixed(1) + '%');
     const capW = headW * capFrac, capH = capW / CAP_AR;
     const capTop = bar.bottom + (narrow ? 8 : 12);
